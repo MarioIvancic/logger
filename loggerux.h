@@ -35,6 +35,13 @@
 
     int t = errno;
     log_info("Error %s", strerror(t));
+    
+    NOTE:
+    format string MUST be literal string because it is concatenated with other literals in macros below.
+    
+    NOTE:
+    This logger functions are thread-safe but timestamps can be little off if calling thread is preempted 
+    between calls to logger_make_timestamp() and logger_msg_ex().
 */
 
 #ifndef __LOGGER_H__

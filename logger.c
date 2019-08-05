@@ -45,6 +45,7 @@ void logger_set_level(unsigned int level)
 }
 
 
+// we are using three calls to fprintf/vfprintf so this is NOT thread-safe
 static void log_msg(const char* level, const char* format, va_list args)
 {
     FILE* fp;
