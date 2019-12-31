@@ -1,0 +1,28 @@
+2019-12-31 21:05:14.648 (11235) [FATAL] Fatal error: 123
+2019-12-31 21:05:14.648 (11235) [ERROR] Error: 234
+2019-12-31 21:05:14.648 (11235) [INFO] Status: 456
+2019-12-31 21:05:14.648 (11235) [ENTERING test_function] @ /home/mario/work/cpp/LIB/mario-libs/logger/loggerex-test/main.c:11 args: void
+2019-12-31 21:05:14.648 (11235) [EXITING test_function] @ /home/mario/work/cpp/LIB/mario-libs/logger/loggerex-test/main.c:15 result: void
+2019-12-31 21:05:14.648 (11235) [CSVDEBUG] main @ /home/mario/work/cpp/LIB/mario-libs/logger/loggerex-test/main.c:40 Some value: 567
+2019-12-31 21:05:14.648 (11235) [VARDEBUG] main @ /home/mario/work/cpp/LIB/mario-libs/logger/loggerex-test/main.c:41 Some value: 678
+2019-12-31 21:08:46.690 (11337) [FATAL] Fatal error: 123
+2019-12-31 21:08:46.690 (11337) [ERROR] Error: 234
+2019-12-31 21:08:46.690 (11337) [INFO] Status: 456
+2019-12-31 21:08:46.690 (11337) [ENTERING test_function] @ /home/mario/work/cpp/LIB/mario-libs/logger/loggerex-test/main.c:11 args: void
+2019-12-31 21:08:46.690 (11337) [EXITING test_function] @ /home/mario/work/cpp/LIB/mario-libs/logger/loggerex-test/main.c:15 result: void
+2019-12-31 21:08:46.690 (11337) [CSVDEBUG] main @ /home/mario/work/cpp/LIB/mario-libs/logger/loggerex-test/main.c:40 Some value: 567
+2019-12-31 21:08:46.690 (11337) [VARDEBUG] main @ /home/mario/work/cpp/LIB/mario-libs/logger/loggerex-test/main.c:41 Some value: 678
+2019-12-31 21:29:10.872 (1408) [FATAL] Fatal error: 123
+2019-12-31 21:29:10.882 (1408) [ERROR] Error: 234
+2019-12-31 21:29:10.882 (1408) [INFO] Status: 456
+2019-12-31 21:29:10.882 (1408) [ENTERING test_function] @ E:\cpp\LIB\mario-libs\logger\loggerex-test\main.c:11 args: void
+2019-12-31 21:29:10.882 (1408) [EXITING test_function] @ E:\cpp\LIB\mario-libs\logger\loggerex-test\main.c:15 result: void
+2019-12-31 21:29:10.882 (1408) [CSVDEBUG] main @ E:\cpp\LIB\mario-libs\logger\loggerex-test\main.c:40 Some value: 567
+2019-12-31 21:29:10.892 (1408) [VARDEBUG] main @ E:\cpp\LIB\mario-libs\logger\loggerex-test\main.c:41 Some value: 678
+2019-12-31 21:30:16.316 (1556) [FATAL] Fatal error: 123
+2019-12-31 21:30:16.316 (1556) [ERROR] Error: 234
+2019-12-31 21:30:16.316 (1556) [INFO] Status: 456
+2019-12-31 21:30:16.316 (1556) [ENTERING test_function] @ E:\cpp\LIB\mario-libs\logger\loggerex-test\main.c:11 args: void
+2019-12-31 21:30:16.316 (1556) [EXITING test_function] @ E:\cpp\LIB\mario-libs\logger\loggerex-test\main.c:15 result: void
+2019-12-31 21:30:16.316 (1556) [CSVDEBUG] main @ E:\cpp\LIB\mario-libs\logger\loggerex-test\main.c:40 Some value: 567
+2019-12-31 21:30:16.316 (1556) [VARDEBUG] main @ E:\cpp\LIB\mario-libs\logger\loggerex-test\main.c:41 Some value: 678
