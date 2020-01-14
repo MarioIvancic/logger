@@ -1,0 +1,109 @@
+2020-01-14 22:41:33.424 (10018) [FATAL] Fatal error: 123
+2020-01-14 22:50:18.542 (10123) [FATAL] Fatal error: 123
+2020-01-14 22:50:18.542 (10123) [ERROR] Error: 234
+2020-01-14 22:50:18.542 (10123) [WARN] Warning: 345
+2020-01-14 22:50:18.542 (10123) [WARN] Status: 456
+2020-01-14 22:56:24.331 (10212) [FATAL] Fatal error: 123
+2020-01-14 22:56:24.331 (10212) [ERROR] Error: 234
+2020-01-14 22:56:24.331 (10212) [WARN] Warning: 345
+2020-01-14 22:56:24.331 (10212) [WARN] Status: 456
+2020-01-14 22:56:24.331 (10212) CSVDEBUG main @ main.c:40 Some value: 567
+2020-01-14 22:56:24.331 (10212) VARDEBUG main @ main.c:41 Some value: 678
+2020-01-14 22:58:22.856 (10915) [FATAL] Fatal error: 123
+2020-01-14 22:58:22.857 (10915) [ERROR] Error: 234
+2020-01-14 22:58:22.857 (10915) [WARN] Warning: 345
+2020-01-14 22:58:22.857 (10915) [WARN] Status: 456
+2020-01-14 22:58:22.857 (10915) [CSVDEBUG] main @ main.c:40 Some value: 567
+2020-01-14 22:58:22.857 (10915) [VARDEBUG] main @ main.c:41 Some value: 678
+2020-01-14 23:02:02.911 (11052) [FATAL] Fatal error: 123
+2020-01-14 23:02:02.912 (11052) [ERROR] Error: 234
+2020-01-14 23:02:02.912 (11052) [WARN] Warning: 345
+2020-01-14 23:02:02.912 (11052) [WARN] Status: 456
+2020-01-14 23:02:02.912 (11052) [ >>> ] test_function @ main.c:11 args: void
+2020-01-14 23:02:02.912 (11052) [ <<< ] test_function @ main.c:15 result: void
+2020-01-14 23:02:02.912 (11052) [CSVDEBUG] main @ main.c:40 Some value: 567
+2020-01-14 23:02:02.912 (11052) [VARDEBUG] main @ main.c:41 Some value: 678
+2020-01-14 23:02:56.055 (11079) [FATAL] Fatal error: 123
+2020-01-14 23:02:56.055 (11079) [ERROR] Error: 234
+2020-01-14 23:02:56.055 (11079) [WARN] Warning: 345
+2020-01-14 23:02:56.055 (11079) [WARN] Status: 456
+2020-01-14 23:02:56.055 (11079)  >>>  test_function @ main.c:11 args: void
+2020-01-14 23:02:56.055 (11079)  <<<  test_function @ main.c:15 result: void
+2020-01-14 23:02:56.055 (11079) [CSVDEBUG] main @ main.c:40 Some value: 567
+2020-01-14 23:02:56.055 (11079) [VARDEBUG] main @ main.c:41 Some value: 678
+2020-01-14 23:03:11.216 (11101) [FATAL] Fatal error: 123
+2020-01-14 23:03:11.216 (11101) [ERROR] Error: 234
+2020-01-14 23:03:11.216 (11101) [WARN] Warning: 345
+2020-01-14 23:03:11.216 (11101) [WARN] Status: 456
+2020-01-14 23:03:11.216 (11101)  >>>>  test_function @ main.c:11 args: void
+2020-01-14 23:03:11.216 (11101)  <<<<  test_function @ main.c:15 result: void
+2020-01-14 23:03:11.216 (11101) [CSVDEBUG] main @ main.c:40 Some value: 567
+2020-01-14 23:03:11.216 (11101) [VARDEBUG] main @ main.c:41 Some value: 678
+2020-01-14 23:03:28.835 (11126) [FATAL] Fatal error: 123
+2020-01-14 23:03:28.835 (11126) [ERROR] Error: 234
+2020-01-14 23:03:28.835 (11126) [WARN] Warning: 345
+2020-01-14 23:03:28.836 (11126) [WARN] Status: 456
+2020-01-14 23:03:28.836 (11126)   >>>>   test_function @ main.c:11 args: void
+2020-01-14 23:03:28.836 (11126)   <<<<   test_function @ main.c:15 result: void
+2020-01-14 23:03:28.836 (11126) [CSVDEBUG] main @ main.c:40 Some value: 567
+2020-01-14 23:03:28.836 (11126) [VARDEBUG] main @ main.c:41 Some value: 678
+2020-01-14 23:16:17.174 (11339) [FATAL] Fatal error: 123
+2020-01-14 23:16:17.174 (11339) [ERROR] Error: 234
+2020-01-14 23:16:17.174 (11339) [WARN] Warning: 345
+2020-01-14 23:16:17.174 (11339) [WARN] Status: 456
+2020-01-14 23:16:17.174 (11339)   >>>>   test_function @ main.c:11 args: void
+2020-01-14 23:16:17.174 (11339)   >>>>   test_function @ main.c:12 args: void
+2020-01-14 23:16:17.174 (11339)   <<<<   test_function @ main.c:16 result: void
+2020-01-14 23:16:17.174 (11339)   <<<<   test_function @ main.c:17 result: void
+2020-01-14 23:16:17.174 (11339) [CSVDEBUG] main @ main.c:43 Some value: 567
+2020-01-14 23:16:17.174 (11339) [VARDEBUG] main @ main.c:44 Some value: 678
+2020-01-14 23:19:23.156 (11399) [FATAL] Fatal error: 123
+2020-01-14 23:19:23.156 (11399) [ERROR] Error: 234
+2020-01-14 23:19:23.156 (11399) [WARN] Warning: 345
+2020-01-14 23:19:23.156 (11399) [WARN] Status: 456
+2020-01-14 23:19:23.157 (11399)   >>>>   test_function @ main.c:11 args: void
+2020-01-14 23:19:23.157 (11399)   >>>>   test_function @ main.c:12 args: void
+2020-01-14 23:19:23.157 (11399)   <<<<   test_function @ main.c:16 result: void
+2020-01-14 23:19:23.157 (11399)   <<<<   test_function @ main.c:17 result: void
+2020-01-14 23:19:23.157 (11399) [CSVDEBUG] main @ main.c:43 Some value: 567
+2020-01-14 23:19:23.157 (11399) [VARDEBUG] main @ main.c:44 Some value: 678
+2020-01-14 23:26:27.487 (11493) [FATAL] Fatal error: 123
+2020-01-14 23:26:27.487 (11493) [ERROR] Error: 234
+2020-01-14 23:26:27.487 (11493) [WARN] Warning: 345
+2020-01-14 23:26:27.487 (11493) [WARN] Status: 456
+2020-01-14 23:26:27.487 (11493)   >>>>   test_function @ main.c:11 args: void
+2020-01-14 23:26:27.487 (11493)   >>>>   test_function @ main.c:12 args: void
+2020-01-14 23:26:27.487 (11493)   <<<<   test_function @ main.c:16 result: void
+2020-01-14 23:26:27.487 (11493)   <<<<   test_function @ main.c:17 result: void
+2020-01-14 23:26:27.487 (11493) [CSVDEBUG] main @ main.c:43 Some value: 567
+2020-01-14 23:26:27.487 (11493) [VARDEBUG] main @ main.c:44 Some value: 678
+2020-01-15 00:02:03.429 (12056) [FATAL] Fatal error: 123
+2020-01-15 00:02:03.429 (12056) [ERROR] Error: 234
+2020-01-15 00:02:03.429 (12056) [WARN] Warning: 345
+2020-01-15 00:02:03.429 (12056) [WARN] Status: 456
+2020-01-15 00:02:03.429 (12056)   >>>>   test_function @ main.c:11 args: void
+2020-01-15 00:02:03.429 (12056)   >>>>   test_function @ main.c:12 args: void
+2020-01-15 00:02:03.429 (12056)   <<<<   test_function @ main.c:16 result: void
+2020-01-15 00:02:03.429 (12056)   <<<<   test_function @ main.c:17 result: void
+2020-01-15 00:02:03.429 (12056) [CSVDEBUG] main @ main.c:43 Some value: 567
+2020-01-15 00:02:03.429 (12056) [VARDEBUG] main @ main.c:44 Some value: 678
+2020-01-15 00:02:56.144 (12086) [FATAL] Fatal error: 123
+2020-01-15 00:02:56.144 (12086) [ERROR] Error: 234
+2020-01-15 00:02:56.144 (12086) [WARN] Warning: 345
+2020-01-15 00:02:56.144 (12086) [WARN] Status: 456
+2020-01-15 00:02:56.144 (12086)   >>>>   test_function @ main.c:11 args: void
+2020-01-15 00:02:56.145 (12086)   >>>>   test_function @ main.c:12 args: void
+2020-01-15 00:02:56.145 (12086)   <<<<   test_function @ main.c:16 result: void
+2020-01-15 00:02:56.145 (12086)   <<<<   test_function @ main.c:17 result: void
+2020-01-15 00:02:56.145 (12086) [CSVDEBUG] main @ main.c:43 Some value: 567
+2020-01-15 00:02:56.145 (12086) [VARDEBUG] main @ main.c:44 Some value: 678
+2020-01-15 00:04:58.970 (12130) [FATAL] Fatal error: 123
+2020-01-15 00:04:58.971 (12130) [ERROR] Error: 234
+2020-01-15 00:04:58.971 (12130) [WARN] Warning: 345
+2020-01-15 00:04:58.971 (12130) [WARN] Status: 456
+2020-01-15 00:04:58.971 (12130)   >>>>   test_function @ main.c:11 args: void
+2020-01-15 00:04:58.971 (12130)   >>>>   test_function @ main.c:12 args: void
+2020-01-15 00:04:58.971 (12130)   <<<<   test_function @ main.c:16 result: void
+2020-01-15 00:04:58.971 (12130)   <<<<   test_function @ main.c:17 result: void
+2020-01-15 00:04:58.971 (12130) [CSVDEBUG] main @ main.c:43 Some value: 567
+2020-01-15 00:04:58.971 (12130) [VARDEBUG] main @ main.c:44 Some value: 678
