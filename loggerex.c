@@ -175,42 +175,6 @@ void logger_disable_debug(unsigned feature)
     _logger_debug_mask &= ~feature;
 }
 
-#ifdef WIN32
-#include <Windows.h>
-struct timezone {
-    int tz_minuteswest;
-    int tz_dsttime;
-};
-
-int gettimeofday(struct timeval *tv, struct timezone *tz)
-{
-    if (tv) {
-        FILETIME               filetime; /* 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 00:00 UTC */
-        ULARGE_INTEGER         x;
-        ULONGLONG              usec;
-        static const ULONGLONG epoch_offset_us = 11644473600000000ULL; /* microseconds betweeen Jan 1,1601 and Jan 1,1970 */
-
-#if _WIN32_WINNT >= _WIN32_WINNT_WIN8
-        GetSystemTimePreciseAsFileTime(&filetime);
-#else
-        GetSystemTimeAsFileTime(&filetime);
-#endif
-        x.LowPart =  filetime.dwLowDateTime;
-        x.HighPart = filetime.dwHighDateTime;
-        usec = x.QuadPart / 10  -  epoch_offset_us;
-        tv->tv_sec  = (time_t)(usec / 1000000ULL);
-        tv->tv_usec = (long)(usec % 1000000ULL);
-    }
-    if (tz) {
-        TIME_ZONE_INFORMATION timezone;
-        GetTimeZoneInformation(&timezone);
-        tz->tz_minuteswest = timezone.Bias;
-        tz->tz_dsttime = 0;
-    }
-    return 0;
-}
-#endif
-
 
 void _logger_make_timestamp(char* buffer, unsigned buff_size)
 {
@@ -225,11 +189,11 @@ void _logger_make_timestamp(char* buffer, unsigned buff_size)
     /* microseconds betweeen Jan 1,1601 and Jan 1,1970 */
     static const ULONGLONG epoch_offset_us = 11644473600000000ULL;
 
-#if _WIN32_WINNT >= _WIN32_WINNT_WIN8
-    GetSystemTimePreciseAsFileTime(&filetime);
-#else
+//#if _WIN32_WINNT >= _WIN32_WINNT_WIN8
+//    GetSystemTimePreciseAsFileTime(&filetime);
+//#else
     GetSystemTimeAsFileTime(&filetime);
-#endif
+//#endif
     x.LowPart =  filetime.dwLowDateTime;
     x.HighPart = filetime.dwHighDateTime;
     usec = x.QuadPart / 10  -  epoch_offset_us;
@@ -370,4 +334,23 @@ void _logger_syslog_info(const char *format, ...)
 
 
 
+
+// helper function for C++ class name
+// class name is returned by typeid(*this).name() and on some
+// compilers like GCC/G++ class name have numeric prefix that
+// need to be stripped off.
+const char* _logger_stralpha(const char* name)
+{
+    int i = 0;
+    while(name[i])
+    {
+        if(name[i] >= '0' && name[i] <= '9')
+        {
+            i++;
+            continue;
+        }
+        return name + i;
+    }
+    return name;
+}
 

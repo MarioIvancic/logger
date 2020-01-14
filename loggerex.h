@@ -42,6 +42,9 @@
     NOTE:
     This logger functions are thread-safe but timestamps can be little off if calling thread is preempted
     between calls to _logger_make_timestamp() and _logger_msg_ex().
+
+    TODO: move some stuff from macros to logging function and use mutex/critical_section to make it
+    thread-safe. Make file names relative to logger initialization call.
 */
 
 #ifndef __LOGGER_H__
@@ -303,6 +306,29 @@ extern void logger_disable_debug(unsigned feature);
         } \
     } while(0)
 
+#ifdef __cplusplus
+#include <typeinfo>
+const char* _logger_stralpha(const char* name);
+#define log_trace_member_enter(format, ...) \
+    do { \
+        if( logger_is_trace() && _logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
+            char _log_time_stamp[32]; \
+            _logger_make_timestamp(_log_time_stamp, sizeof(_log_time_stamp)); \
+            _logger_msg_ex("%s (%d) [ENTERING %s::%s] @ %s:%d " format "\n", _log_time_stamp, GETPID(), _logger_stralpha(typeid(*this).name()), __func__, __FILE__, __LINE__, ##__VA_ARGS__ ); \
+        } \
+    } while(0)
+
+
+
+#define log_trace_member_exit(format, ...) \
+    do { \
+        if( logger_is_trace() && _logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
+            char _log_time_stamp[32]; \
+            _logger_make_timestamp(_log_time_stamp, sizeof(_log_time_stamp)); \
+            _logger_msg_ex("%s (%d) [EXITING %s::%s] @ %s:%d " format "\n", _log_time_stamp, GETPID(), _logger_stralpha(typeid(*this).name()), __func__, __FILE__, __LINE__, ##__VA_ARGS__ ); \
+        } \
+    } while(0)
+#endif
 
 // ###################################  LOGGER PRIVETE API  ###################################
 
