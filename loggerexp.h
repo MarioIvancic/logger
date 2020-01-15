@@ -223,7 +223,7 @@ extern void logger_unlock(void);
 
 #define log_debug(feature, format, ...) \
     do { \
-        if( logger_is_debug() && logger_is_debug_feature( (feature) ) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
+        if( (feature) & DEBUG_STATIC_MASK && logger_is_debug() && logger_is_debug_feature( (feature) ) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
             char logger_tmp_buffer__[512]; \
             logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "[" #feature "]", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
         } \
@@ -251,7 +251,7 @@ extern void logger_unlock(void);
 
 #define log_condtrace_enter(cond, format, ...) \
     do { \
-        if( logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
+        if( (cond) & TRACE_STATIC_MASK && logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
             char logger_tmp_buffer__[512]; \
             logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  >>>>  ", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
         } \
@@ -260,7 +260,7 @@ extern void logger_unlock(void);
 
 #define log_condtrace_exit(cond, format, ...) \
     do { \
-        if( logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
+        if( (cond) & TRACE_STATIC_MASK && logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
             char logger_tmp_buffer__[512]; \
             logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  <<<<  ", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
         } \
@@ -290,7 +290,7 @@ extern void logger_unlock(void);
 
 #define log_condtrace_member_enter(cond, format, ...) \
     do { \
-        if( logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
+        if( (cond) & TRACE_STATIC_MASK && logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
             char logger_tmp_buffer__[512]; \
             logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  >>>>  ", typeid(*this).name(), __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
         } \
@@ -299,7 +299,7 @@ extern void logger_unlock(void);
 
 #define log_condtrace_member_exit(cond, format, ...) \
     do { \
-        if( logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
+        if( (cond) & TRACE_STATIC_MASK && logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
             char logger_tmp_buffer__[512]; \
             logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  <<<<  ", typeid(*this).name(), __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
         } \

@@ -22,3 +22,15 @@ Provides FATAL, ERROR, WARNING, INFO, DEBUG and TRACE logging levels and 32 DEBU
 Timestamps are with 1 millisecond resolution using gettimeofday() on Linux and 
 GetSystemTimePreciseAsFileTime() / GetSystemTimeAsFileTime() on Windows.
 
+# loggerexp
+A even better logger implementation which locks internals while getting timestamp and writing 
+to log file. Makes a single call to fprintf. 
+It is thread-safe when wtites to file. Syslog write is not protected by mutex.
+The API is compatible to loggerux API but it is expanded to include some new features.
+Works on Linux, Windows XP and Windows 7.
+Provides FATAL, ERROR, WARNING, INFO, DEBUG and TRACE logging levels, 32 DEBUG features,
+and 32 TRACE features. Debug and trace functionality have static masks to exclude unneeded
+stuff at compile time.
+Timestamps are with 1 millisecond resolution using gettimeofday() on Linux and 
+GetSystemTimePreciseAsFileTime() / GetSystemTimeAsFileTime() on Windows.
+

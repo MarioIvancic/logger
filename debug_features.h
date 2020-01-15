@@ -43,6 +43,17 @@ extern "C" {
 #define SQLDEBUG    (1 << 7)
 #define VARDEBUG    (1 << 8)
 
+// #define DEBUG_STATIC_MASK   (CSVDEBUG | XMLDEBUG)
+#define DEBUG_STATIC_MASK   (-1)
+
+// arbitrary trace features, must have unique single bit values
+#define TRACE_CORE     (1 << 0)
+#define TRACE_UTILS    (1 << 1)
+#define TRACE_PDU      (1 << 2)
+
+// #define TRACE_STATIC_MASK   (TRACE_CORE)
+#define TRACE_STATIC_MASK   (-1)
+
 #ifdef __cplusplus
 }
 #endif
