@@ -216,7 +216,7 @@ extern void logger_unlock(void);
     do { \
         if(logger_is_info()) { \
             char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), 2, "[WARN]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), 2, "[INFO]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
