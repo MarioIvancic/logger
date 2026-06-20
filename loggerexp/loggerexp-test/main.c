@@ -2,8 +2,8 @@
 // testing loggerexp
 
 #include <stdio.h>
-#include "../loggerexp.h"
-#include "../debug_features.h"
+#include "../logger.h"
+#include "debug_features.h"
 
 
 void test_function(void)

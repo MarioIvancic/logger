@@ -35,18 +35,15 @@
 			<Add option="-Wall" />
 			<Add option="-DGPT_PRINT_ENABLE" />
 		</Compiler>
-		<Unit filename="../debug_features.h" />
-		<Unit filename="../loggerexp.c">
+		<Unit filename="../logger.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../loggerexp.h" />
+		<Unit filename="../logger.h" />
+		<Unit filename="debug_features.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

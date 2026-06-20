@@ -1,4 +1,4 @@
-/*  Copyright (c) 2014, 2019, Mario Ivančić
+/*  Copyright (c) 2014, 2026, Mario Ivančić
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -22,7 +22,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// loggerexp.h
+// loggerexp/logger.h
 
 /*
     This logger is protected by mutex. On Linux it should be linked against pthread library.
@@ -47,8 +47,8 @@
     TODO: Make file names relative to logger initialization call.
 */
 
-#ifndef LOGGEREXP_H_INCLUDED__
-#define LOGGEREXP_H_INCLUDED__
+#ifndef LOGGER_H_INCLUDED
+#define LOGGER_H_INCLUDED
 
 #include <stdlib.h>
 
@@ -56,34 +56,10 @@
 extern "C" {
 #endif
 
-#ifdef _WIN32
-    #define LOGGER_SYSLOG 0
-#else
-    #define LOGGER_SYSLOG 1
-#endif // _WIN32
-
 
 // define what to do when ABORT_EXIT() is called
 // #define ABORT_EXIT() exit(1)
 #define ABORT_EXIT() abort()
-
-#ifdef _WIN32
-    #include <windows.h>
-    #include <process.h>
-    //#include <processthreadsapi.h>
-    // #define GETPID() GetCurrentProcessId()
-    #define GETPID() GetCurrentThreadId()
-#else
-    #include <sys/types.h>
-    #include <unistd.h>
-    #include <sys/syscall.h>
-    #include <pthread.h>
-    //#define GETPID() getpid()
-    //#define GETPID() gettid()
-    // this will return kernel task ID which is not the same as pthread_t object
-    #define GETPID() syscall(SYS_gettid)
-#endif // _WIN32
-
 
 extern unsigned logger_log_level_;
 extern unsigned logger_debug_mask_;
@@ -112,6 +88,7 @@ enum
     LOGGER_OPTION_SYSLOG            = 1 << 3,   // log to syslog
     LOGGER_OPTION_STDERR            = 1 << 4,   // log to stderr
     LOGGER_OPTION_MILLISECONDS      = 1 << 5,   // enable milliseconds in timestamps
+    LOGGER_OPTION_MUTEX             = 1 << 6,   // enable locking by mutex/critical section
 };
 
 // Set log file name and options. Caller must provide storage for string
@@ -184,22 +161,22 @@ extern void logger_unlock(void);
 
 #define log_fatal(format, ...) \
     do { \
-        char logger_tmp_buffer__[512]; \
-        logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), 0, "[FATAL]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+        char logger_tmp_buffer_[512]; \
+        logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), 0, "[FATAL]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
     } while(0)
 
 #define log_fatal_exit(format, ...) \
     do { \
-        char logger_tmp_buffer__[512]; \
-        logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), 0, "[FATAL]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+        char logger_tmp_buffer_[512]; \
+        logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), 0, "[FATAL]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         logger_close(); ABORT_EXIT(); \
     } while(0)
 
 #define log_error(format, ...) \
     do { \
         if(logger_is_error()) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), 1, "[ERROR]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), 1, "[ERROR]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
@@ -207,16 +184,16 @@ extern void logger_unlock(void);
 #define log_warn(format, ...) \
     do { \
         if(logger_is_warn()) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), 2, "[WARN]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), 2, "[WARN]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
 #define log_info(format, ...) \
     do { \
         if(logger_is_info()) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), 2, "[INFO]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), 2, "[INFO]", 0, 0, 0, 0, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
@@ -224,8 +201,8 @@ extern void logger_unlock(void);
 #define log_debug(feature, format, ...) \
     do { \
         if( (feature) & DEBUG_STATIC_MASK && logger_is_debug() && logger_is_debug_feature( (feature) ) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "[" #feature "]", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), -1, "[" #feature "]", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
@@ -233,8 +210,8 @@ extern void logger_unlock(void);
 #define log_trace_enter(format, ...) \
     do { \
         if( logger_is_trace() && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  >>>>  ", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), -1, "  >>>>  ", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
@@ -242,8 +219,8 @@ extern void logger_unlock(void);
 #define log_trace_exit(format, ...) \
     do { \
         if( logger_is_trace() && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  <<<<  ", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), -1, "  <<<<  ", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
@@ -252,8 +229,8 @@ extern void logger_unlock(void);
 #define log_condtrace_enter(cond, format, ...) \
     do { \
         if( (cond) & TRACE_STATIC_MASK && logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  >>>>  ", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), -1, "  >>>>  ", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
@@ -261,8 +238,8 @@ extern void logger_unlock(void);
 #define log_condtrace_exit(cond, format, ...) \
     do { \
         if( (cond) & TRACE_STATIC_MASK && logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  <<<<  ", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), -1, "  <<<<  ", 0, __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
@@ -273,8 +250,8 @@ extern void logger_unlock(void);
 #define log_trace_member_enter(format, ...) \
     do { \
         if( logger_is_trace() && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  >>>>  ", typeid(*this).name(), __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), -1, "  >>>>  ", typeid(*this).name(), __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
@@ -283,16 +260,16 @@ extern void logger_unlock(void);
 #define log_trace_member_exit(format, ...) \
     do { \
         if( logger_is_trace() && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  <<<<  ", typeid(*this).name(), __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), -1, "  <<<<  ", typeid(*this).name(), __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
 #define log_condtrace_member_enter(cond, format, ...) \
     do { \
         if( (cond) & TRACE_STATIC_MASK && logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  >>>>  ", typeid(*this).name(), __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), -1, "  >>>>  ", typeid(*this).name(), __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
@@ -300,8 +277,8 @@ extern void logger_unlock(void);
 #define log_condtrace_member_exit(cond, format, ...) \
     do { \
         if( (cond) & TRACE_STATIC_MASK && logger_is_trace() && logger_is_trace_feature((cond)) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
-            char logger_tmp_buffer__[512]; \
-            logger_msg_ex_(logger_tmp_buffer__, sizeof(logger_tmp_buffer__), -1, "  <<<<  ", typeid(*this).name(), __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer__, ##__VA_ARGS__ ); \
+            char logger_tmp_buffer_[512]; \
+            logger_msg_ex_(logger_tmp_buffer_, sizeof(logger_tmp_buffer_), -1, "  <<<<  ", typeid(*this).name(), __func__, __FILE__, __LINE__, "%s " format "\n", logger_tmp_buffer_, ##__VA_ARGS__ ); \
         } \
     } while(0)
 
@@ -313,7 +290,7 @@ extern void logger_unlock(void);
 
 
 // Core log function, variadic
-extern void logger_msg_ex_(char* logger_tmp_buffer__, unsigned len, int nseverity, const char* severity,
+extern void logger_msg_ex_(char* logger_tmp_buffer_, unsigned len, int nseverity, const char* severity,
                            const char* theclass, const char* func, const char* file,
                            int line, const char* format, ...);
 
@@ -321,6 +298,5 @@ extern void logger_msg_ex_(char* logger_tmp_buffer__, unsigned len, int nseverit
 #ifdef __cplusplus
 }
 #endif
-
-#endif // LOGGEREXP_H_INCLUDED__
+#endif // LOGGER_H_INCLUDED
 

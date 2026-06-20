@@ -1,4 +1,4 @@
-/*  Copyright (c) 2014, 2019, Mario Ivančić
+/*  Copyright (c) 2014, 2026, Mario Ivančić
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -22,6 +22,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+// loggerex/logger.c
 // simple logging for C
 
 
@@ -31,7 +32,7 @@
 #include <sys/time.h>
 #include <stdlib.h>
 
-#include "loggerex.h"
+#include "logger.h"
 
 #if LOGGER_SYSLOG
 #include <syslog.h>   // syslog(3), openlog(3), closelog(3)
@@ -51,19 +52,19 @@
 
 
 
-// _logger_log_level constants
+// logger_log_level_ constants
 // FATAL is 0 (never masked)
 // ERROR is 1
 // WARN is 2
 // INFO is 3
 // DEBUG is 4
 // TRACE is 5
-unsigned _logger_log_level = 0;
+unsigned logger_log_level_ = 0;
 
 // debug level bits (0 .. 31) are for debugging using log_debug_ex() function
-unsigned _logger_debug_mask = 0;
+unsigned logger_debug_mask_ = 0;
 
-unsigned _logger_options = LOGGER_OPTION_FILE;
+unsigned logger_options_ = LOGGER_OPTION_FILE;
 static const char* log_file = 0;
 static FILE* fp = 0;
 
@@ -99,19 +100,19 @@ static int syslog_open = 0;
 void logger_open(const char* log_file_name, unsigned options)
 {
     log_file = log_file_name;
-    _logger_options = options;
+    logger_options_ = options;
 
-    if(_logger_options & LOGGER_OPTION_KEEP_FILE_OPEN)
+    if(logger_options_ & LOGGER_OPTION_KEEP_FILE_OPEN)
     {
-        if(_logger_options & LOGGER_OPTION_FILE)
+        if(logger_options_ & LOGGER_OPTION_FILE)
         {
             if(fp) fclose(fp);
             fp = fopen(log_file, "a");
         }
 #if LOGGER_SYSLOG
-        if(_logger_options & LOGGER_OPTION_SYSLOG)
+        if(logger_options_ & LOGGER_OPTION_SYSLOG)
         {
-            _logger_syslog_open();
+            logger_syslog_open_();
         }
 #endif // LOGGER_SYSLOG
     }
@@ -139,44 +140,44 @@ void logger_close(void)
 
 // Set log level to one of LOGGER_LEVEL_FATAL, LOGGER_LEVEL_ERROR,
 // LOGGER_LEVEL_WARNING, LOGGER_LEVEL_INFO.
-// _logger_log_level will affect logging using log_fatal, log_error,
+// logger_log_level_ will affect logging using log_fatal, log_error,
 // log_warn, log_info and log_debug functions.
 void logger_set_log_level(unsigned level)
 {
-    _logger_log_level = level;
+    logger_log_level_ = level;
 }
 
 
-// This function is used to set bits in _logger_debug_mask
+// This function is used to set bits in logger_debug_mask_
 // Every bit in mask controls one feature that you want to debug.
 void logger_set_debug_mask(unsigned mask)
 {
-    _logger_debug_mask = mask;
+    logger_debug_mask_ = mask;
 }
 
 
-// This function is used to get _logger_debug_mask
+// This function is used to get logger_debug_mask_
 unsigned logger_get_debug_mask(void)
 {
-    return _logger_debug_mask;
+    return logger_debug_mask_;
 }
 
 
 // Enable debuging for feature (bitmask)
 void logger_enable_debug(unsigned feature)
 {
-    _logger_debug_mask |= feature;
+    logger_debug_mask_ |= feature;
 }
 
 
 // Disable debuging for feature (bitmask)
 void logger_disable_debug(unsigned feature)
 {
-    _logger_debug_mask &= ~feature;
+    logger_debug_mask_ &= ~feature;
 }
 
 
-void _logger_make_timestamp(char* buffer, unsigned buff_size)
+void logger_make_timestamp_(char* buffer, unsigned buff_size)
 {
     struct tm TM, *ptm;
     unsigned ms = 0;
@@ -210,7 +211,7 @@ void _logger_make_timestamp(char* buffer, unsigned buff_size)
     TM = *ptm;
 #endif // WIN32
 
-    if(_logger_options & LOGGER_OPTION_MILLISECONDS)
+    if(logger_options_ & LOGGER_OPTION_MILLISECONDS)
     {
         snprintf(buffer, buff_size, "%04d-%02d-%02d %02d:%02d:%02d.%03d",
             TM.tm_year + 1900, TM.tm_mon + 1, TM.tm_mday,
@@ -228,9 +229,9 @@ void _logger_make_timestamp(char* buffer, unsigned buff_size)
 
 
 // "%s (%d) [FATAL] " format "\n", time_stamp, getpid()
-void _logger_msg_ex(const char* format, ...)
+void logger_msg_ex_(const char* format, ...)
 {
-    if(_logger_options & LOGGER_OPTION_FILE)
+    if(logger_options_ & LOGGER_OPTION_FILE)
     {
         if(!fp && log_file) fp = fopen(log_file, "a");
         if(fp)
@@ -240,8 +241,8 @@ void _logger_msg_ex(const char* format, ...)
             vfprintf(fp, format, args);
             va_end (args);
 
-            if(_logger_options & LOGGER_OPTION_FLUSH_FILE) fflush(fp);
-            if(_logger_options & LOGGER_OPTION_KEEP_FILE_OPEN) ;
+            if(logger_options_ & LOGGER_OPTION_FLUSH_FILE) fflush(fp);
+            if(logger_options_ & LOGGER_OPTION_KEEP_FILE_OPEN){ /* Nothing here. */ }
             else
             {
                 fclose(fp);
@@ -249,7 +250,7 @@ void _logger_msg_ex(const char* format, ...)
             }
         }
     }
-    if(_logger_options & LOGGER_OPTION_STDERR)
+    if(logger_options_ & LOGGER_OPTION_STDERR)
     {
         va_list args;
         va_start (args, format);
@@ -281,7 +282,7 @@ void _logger_msg_ex(const char* format, ...)
     If syslog_ident is NULL, the program name is used.
 */
 
-void _logger_syslog_open(void)
+void logger_syslog_open_(void)
 {
     if(! syslog_open)
     {
@@ -291,9 +292,9 @@ void _logger_syslog_open(void)
 }
 
 // "[FATAL] " format "\n"
-void _logger_syslog_fatal(const char *format, ...)
+void logger_syslog_fatal_(const char *format, ...)
 {
-    if(! syslog_open) _logger_syslog_open();
+    if(! syslog_open) logger_syslog_open_();
     va_list ptr;
     va_start(ptr, format);
     vsyslog(LOG_CRIT, format, ptr);
@@ -301,30 +302,30 @@ void _logger_syslog_fatal(const char *format, ...)
 }
 
 
-// "[FATAL] " format "\n"
-void _logger_syslog_err(const char *format, ...)
+// "[ERROR] " format "\n"
+void logger_syslog_err_(const char *format, ...)
 {
-    if(! syslog_open) _logger_syslog_open();
+    if(! syslog_open) logger_syslog_open_();
     va_list ptr;
     va_start(ptr, format);
     vsyslog(LOG_ERR, format, ptr);
     va_end(ptr);
 }
 
-// "[FATAL] " format "\n"
-void _logger_syslog_warn(const char *format, ...)
+// "[WARNING] " format "\n"
+void logger_syslog_warn_(const char *format, ...)
 {
-    if(! syslog_open) _logger_syslog_open();
+    if(! syslog_open) logger_syslog_open_();
     va_list ptr;
     va_start(ptr, format);
     vsyslog(LOG_WARNING, format, ptr);
     va_end(ptr);
 }
 
-// "[FATAL] " format "\n"
-void _logger_syslog_info(const char *format, ...)
+// "[INFO] " format "\n"
+void logger_syslog_info_(const char *format, ...)
 {
-    if(! syslog_open) _logger_syslog_open();
+    if(! syslog_open) logger_syslog_open_();
     va_list ptr;
     va_start(ptr, format);
     vsyslog(LOG_INFO, format, ptr);
@@ -339,7 +340,7 @@ void _logger_syslog_info(const char *format, ...)
 // class name is returned by typeid(*this).name() and on some
 // compilers like GCC/G++ class name have numeric prefix that
 // need to be stripped off.
-const char* _logger_stralpha(const char* name)
+const char* logger_stralpha(const char* name)
 {
     int i = 0;
     while(name[i])

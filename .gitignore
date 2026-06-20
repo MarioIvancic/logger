@@ -1,0 +1,8 @@
+*.log
+*.layout
+*.depend
+loggerex/loggerex-test/bin
+loggerex/loggerex-test/obj
+loggerexp/loggerexp-test/bin
+loggerexp/loggerexp-test/obj
+

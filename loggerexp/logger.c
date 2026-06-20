@@ -1,4 +1,4 @@
-/*  Copyright (c) 2014, 2019, Mario Ivančić
+/*  Copyright (c) 2014, 2026, Mario Ivančić
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -22,8 +22,28 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+// loggerexp/logger.c
 // simple logging for C
 
+
+#ifdef _WIN32
+    #define LOGGER_SYSLOG 0
+    #include <windows.h>
+    #include <process.h>
+    //#include <processthreadsapi.h>
+    // #define GETPID() GetCurrentProcessId()
+    #define GETPID() GetCurrentThreadId()
+#else
+    #define LOGGER_SYSLOG 1
+    #include <sys/types.h>
+    #include <unistd.h>
+    #include <sys/syscall.h>
+    #include <pthread.h>
+    //#define GETPID() getpid()
+    //#define GETPID() gettid()
+    // this will return kernel task ID which is not the same as pthread_t object
+    #define GETPID() syscall(SYS_gettid)
+#endif // _WIN32
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -32,7 +52,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "loggerexp.h"
+#include "logger.h"
 
 #if LOGGER_SYSLOG
 #include <syslog.h>   // syslog(3), openlog(3), closelog(3)
@@ -127,7 +147,7 @@ void logger_open_ex(const char* log_file_name, unsigned options, const char* fil
     InitializeCriticalSection(&mutex);
 #else
     pthread_mutexattr_t attr;
-	pthread_mutexattr_init (&attr);
+    pthread_mutexattr_init (&attr);
     pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE_NP);
     pthread_mutex_init(&mutex, &attr);
 #endif // _WIN32
@@ -384,7 +404,7 @@ void logger_msg_ex_(char* buff, unsigned len, int nseverity, const char* severit
         else snprintf(p, len, " (%d) %s %s::%s @ %s:%d", pid, severity, class_name, func, file_name, line);
         p[len - 1] = 0;
 
-        logger_lock();
+        if(logger_options_ & LOGGER_OPTION_MUTEX) logger_lock();
 
         if(logger_options_ & LOGGER_OPTION_FILE)
         {
@@ -397,7 +417,7 @@ void logger_msg_ex_(char* buff, unsigned len, int nseverity, const char* severit
                 va_end (args);
 
                 if(logger_options_ & LOGGER_OPTION_FLUSH_FILE) fflush(fp);
-                if(logger_options_ & LOGGER_OPTION_KEEP_FILE_OPEN) ;
+                if(logger_options_ & LOGGER_OPTION_KEEP_FILE_OPEN){ /* Nothing here */ }
                 else
                 {
                     fclose(fp);
@@ -414,7 +434,7 @@ void logger_msg_ex_(char* buff, unsigned len, int nseverity, const char* severit
             va_end (args);
         }
 
-        logger_unlock();
+        if(logger_options_ & LOGGER_OPTION_MUTEX) logger_unlock();
     }
 
 #if LOGGER_SYSLOG

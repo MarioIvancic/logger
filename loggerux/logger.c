@@ -1,4 +1,4 @@
-/*  Copyright (c) 2014, Mario Ivančić
+/*  Copyright (c) 2014 - 2026, Mario Ivančić
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -22,6 +22,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+// loggerux/logger.c
 // simple logging for C
 
 
@@ -31,7 +32,7 @@
 #include <sys/time.h>
 #include <stdlib.h>
 
-#include "loggerux.h"
+#include "logger.h"
 
 #ifdef LOGGER_SYSLOG
 #include <syslog.h>   // syslog(3), openlog(3), closelog(3)

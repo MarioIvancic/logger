@@ -1,4 +1,4 @@
-/*  Copyright (c) 2014, Mario Ivancic
+/*  Copyright (c) 2014 - 2026, Mario Ivancic
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -22,7 +22,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// loggerux.h
+// loggerux/logger.h
 
 /*
     NOTE:
@@ -44,8 +44,8 @@
     between calls to logger_make_timestamp() and logger_msg_ex().
 */
 
-#ifndef __LOGGER_H__
-#define __LOGGER_H__
+#ifndef LOGGER_H_INCLUDED
+#define LOGGER_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C" {
@@ -268,4 +268,4 @@ extern void logger_disable_debug(unsigned feature);
 }
 #endif
 
-#endif // __LOGGER_H__
+#endif // LOGGER_H_INCLUDED

@@ -2,8 +2,8 @@
 // testing loggerex
 
 #include <stdio.h>
-#include "../loggerex.h"
-#include "../debug_features.h"
+#include "../logger.h"
+#include "debug_features.h"
 
 
 void test_function(void)
