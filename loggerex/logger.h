@@ -1,4 +1,4 @@
-/*  Copyright (c) 2014, 2026, Mario Ivanèiæ
+/*  Copyright (c) 2014, 2026, Mario IvanÄiÄ‡
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -185,7 +185,7 @@ extern void logger_disable_debug(unsigned feature);
 
 #define log_error(format, ...) \
     do { \
-        if(logger_log_level_ & (1 << 0)) { \
+        if(logger_is_error()) { \
             if(logger_options_ & LOGGER_OPTION_SYSLOG) logger_syslog_err_("[ERROR] " format "\n", ##__VA_ARGS__ ); \
             if(logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
                 char log_timestamp_buffer_[32]; \
@@ -197,7 +197,7 @@ extern void logger_disable_debug(unsigned feature);
 
 #define log_warn(format, ...) \
     do { \
-        if(logger_log_level_ & (1 << 1)) { \
+        if(logger_is_warn()) { \
             if(logger_options_ & LOGGER_OPTION_SYSLOG) logger_syslog_warn_("[WARN] " format "\n", ##__VA_ARGS__ ); \
             if(logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
                 char log_timestamp_buffer_[32]; \
@@ -209,7 +209,7 @@ extern void logger_disable_debug(unsigned feature);
 
 #define log_info(format, ...) \
     do { \
-        if(logger_log_level_ & (1 << 2)) { \
+        if(logger_is_info()) { \
             if(logger_options_ & LOGGER_OPTION_SYSLOG) logger_syslog_info_("[INFO] " format "\n", ##__VA_ARGS__ ); \
             if(logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
                 char log_timestamp_buffer_[32]; \
@@ -243,7 +243,7 @@ extern void logger_disable_debug(unsigned feature);
 
 #define log_error(format, ...) \
     do { \
-        if(logger_log_level_ & (1 << 0) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
+        if(logger_is_error() && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
         { \
             char log_timestamp_buffer_[32]; \
             logger_make_timestamp_(log_timestamp_buffer_, sizeof(log_timestamp_buffer_)); \
@@ -253,7 +253,7 @@ extern void logger_disable_debug(unsigned feature);
 
 #define log_warn(format, ...) \
     do { \
-        if(logger_log_level_ & (1 << 1) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
+        if(logger_is_warn() && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
         { \
             char log_timestamp_buffer_[32]; \
             logger_make_timestamp_(log_timestamp_buffer_, sizeof(log_timestamp_buffer_)); \
@@ -263,7 +263,7 @@ extern void logger_disable_debug(unsigned feature);
 
 #define log_info(format, ...) \
     do { \
-        if(logger_log_level_ & (1 << 2) && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
+        if(logger_is_info() && logger_options_ & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
         { \
             char log_timestamp_buffer_[32]; \
             logger_make_timestamp_(log_timestamp_buffer_, sizeof(log_timestamp_buffer_)); \

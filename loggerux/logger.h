@@ -149,7 +149,7 @@ void logger_syslog_info(const char *format, ...);
 
 #define log_error(format, ...) \
     do { \
-        if(_logger_log_level & (1 << 0)) { \
+        if(logger_is_error()) { \
             if(_logger_options & LOGGER_OPTION_SYSLOG) logger_syslog_err("[ERROR] " format "\n", ##__VA_ARGS__ ); \
             if(_logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
                 char __log_time_stamp[32]; \
@@ -161,7 +161,7 @@ void logger_syslog_info(const char *format, ...);
 
 #define log_warn(format, ...) \
     do { \
-        if(_logger_log_level & (1 << 1)) { \
+        if(logger_is_warn()) { \
             if(_logger_options & LOGGER_OPTION_SYSLOG) logger_syslog_warn("[WARN] " format "\n", ##__VA_ARGS__ ); \
             if(_logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
                 char __log_time_stamp[32]; \
@@ -173,7 +173,7 @@ void logger_syslog_info(const char *format, ...);
 
 #define log_info(format, ...) \
     do { \
-        if(_logger_log_level & (1 << 2)) { \
+        if(logger_is_info()) { \
             if(_logger_options & LOGGER_OPTION_SYSLOG) logger_syslog_info("[INFO] " format "\n", ##__VA_ARGS__ ); \
             if(_logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) { \
                 char __log_time_stamp[32]; \
@@ -207,7 +207,7 @@ void logger_syslog_info(const char *format, ...);
 
 #define log_error(format, ...) \
     do { \
-        if(_logger_log_level & (1 << 0) && _logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
+        if(logger_is_error() && _logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
         { \
             char __log_time_stamp[32]; \
             logger_make_timestamp(__log_time_stamp, sizeof(__log_time_stamp)); \
@@ -217,7 +217,7 @@ void logger_syslog_info(const char *format, ...);
 
 #define log_warn(format, ...) \
     do { \
-        if(_logger_log_level & (1 << 1) && _logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
+        if(logger_is_warn() && _logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
         { \
             char __log_time_stamp[32]; \
             logger_make_timestamp(__log_time_stamp, sizeof(__log_time_stamp)); \
@@ -227,7 +227,7 @@ void logger_syslog_info(const char *format, ...);
 
 #define log_info(format, ...) \
     do { \
-        if(_logger_log_level & (1 << 2) && _logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
+        if(logger_is_info() && _logger_options & (LOGGER_OPTION_FILE | LOGGER_OPTION_STDERR)) \
         { \
             char __log_time_stamp[32]; \
             logger_make_timestamp(__log_time_stamp, sizeof(__log_time_stamp)); \
